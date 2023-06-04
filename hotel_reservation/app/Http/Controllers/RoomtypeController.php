@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\RoomType;
-
 class RoomtypeController extends Controller
 {
     /**
@@ -12,7 +11,8 @@ class RoomtypeController extends Controller
      */
     public function index()
     {
-        return view('roomtype.index');
+        $data=RoomType::all();
+        return view('roomtype.index', ['data'=>$data]);
     }
 
     /**
@@ -40,7 +40,8 @@ class RoomtypeController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $data=RoomType::find($id);
+        return view('roomtype.show', ['data'=>$data]);
     }
 
     /**
@@ -48,7 +49,8 @@ class RoomtypeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data=RoomType::find($id);
+        return view('roomtype.edit', ['data'=>$data]);
     }
 
     /**
@@ -56,7 +58,12 @@ class RoomtypeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data=RoomType::find($id);
+        $data->type_name=$request->type;
+        $data->description=$request->description;
+        $data->save();
+
+        return redirect('admin/roomtype/' .$id. '/edit')->with('success', 'Changes Saved.'); 
     }
 
     /**
@@ -64,6 +71,9 @@ class RoomtypeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        RoomType::where('id', $id)->delete();
+
+        return redirect('admin/roomtype')->with('success', 'Deleted Successfully.'); 
+
     }
 }
